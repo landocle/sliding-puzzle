@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 
 import '@Styles/App.scss';
 
@@ -12,8 +12,10 @@ export default class App extends PureComponent {
       <BrowserRouter>
         <GameFactory>
           <div className="app">
-            <Route exact path="/" component={Home} />
-            <Route render={() => <Redirect to="/" />} />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
           </div>
         </GameFactory>
       </BrowserRouter>
