@@ -12,7 +12,10 @@ import {
 const NEW_GAME = '__new_game__';
 const RESET_GAME = '__reset_game__';
 
-// [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+const defaultTileCount = 15;
+const defaultGridWidth = 4;
+
+// e.g., [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
 const genrateArray = (num, add) => {
   let puzzle = [...Array(num)].map((_, i) => i + add);
   puzzle.push(0);
@@ -22,9 +25,8 @@ const genrateArray = (num, add) => {
 const ValuesContext = createContext({});
 const SetValueContext = createContext(() => {});
 
-const isSolvable = puzzle => {
+const isSolvable = (puzzle, gridWidth) => {
   let parity = 0;
-  let gridWidth = 4;
   let row = 0;
   let blankRow = 0;
   for (let i = 0; i < puzzle.length; i++) {
@@ -54,12 +56,12 @@ const isSolvable = puzzle => {
   }
 };
 
-const genratePuzzle = (arr, event) => {
+const genratePuzzle = (arr, event, gridWidth, tileCount) => {
   if (event === NEW_GAME) {
-    if (isSolvable(arr)) {
+    if (isSolvable(arr, gridWidth)) {
       return arr;
     } else {
-      return genratePuzzle(shuffle(genrateArray(15, 1)), NEW_GAME);
+      return genratePuzzle(shuffle(genrateArray(tileCount, 1)), NEW_GAME, gridWidth, tileCount);
     }
   } else {
     return arr;
@@ -67,24 +69,26 @@ const genratePuzzle = (arr, event) => {
 };
 
 class GameFactory extends Component {
-  defaultState = (_event, num) => ({
+  defaultState = (_event, num, gridWidth, tileCount) => ({
     numbers:
       _event === NEW_GAME
-        ? genratePuzzle(shuffle(genrateArray(15, num)), _event)
-        : shuffle(genrateArray(15, num)),
+        ? genratePuzzle(shuffle(genrateArray(tileCount, num)), _event, gridWidth, tileCount)
+        : shuffle(genrateArray(tileCount, num)),
     moves: 0,
     seconds: 0,
-    gameState: gameState.GAME_IDLE
+    gameState: gameState.GAME_IDLE,
+    gridWidth: gridWidth,
+    tileCount: tileCount 
   });
 
-  state = this.defaultState(NEW_GAME, 1);
+  state = this.defaultState(NEW_GAME, 1, defaultGridWidth, defaultTileCount);
 
   timerId = null;
 
   reset = () => {
-    this.setState(this.defaultState(RESET_GAME));
+    this.setState(this.defaultState(RESET_GAME, 0, this.state.gridWidth, this.state.tileCount));
     setTimeout(() => {
-      this.setState(this.defaultState(NEW_GAME, 1));
+      this.setState(this.defaultState(NEW_GAME, 1, this.state.gridWidth, this.state.tileCount));
       if (this.timerId) {
         clearInterval(this.timerId);
       }
@@ -93,8 +97,8 @@ class GameFactory extends Component {
 
   gettingEmptyBoxLocation = () => {
     let location = this.state.numbers.indexOf(0);
-    let column = Math.floor(location % 4);
-    let row = Math.floor(location / 4);
+    let column = Math.floor(location % this.state.gridWidth);
+    let row = Math.floor(location / this.state.gridWidth);
     return [row, column, location];
   };
 
@@ -106,7 +110,8 @@ class GameFactory extends Component {
         from,
         row,
         col,
-        moveType
+        moveType,
+        this.state.gridWidth
       );
       if (updated) {
         newState = {
@@ -148,7 +153,7 @@ class GameFactory extends Component {
     this.setState(prevState => {
       let newState = null;
       let to = prevState.numbers.indexOf(0);
-      if (isNeighbour(to, from)) {
+      if (isNeighbour(to, from, this.state.gridWidth)) {
         const newNumList = swap(prevState.numbers, to, from);
         newState = {
           number: newNumList,
@@ -171,6 +176,10 @@ class GameFactory extends Component {
       }
       return newState;
     });
+  };
+
+  changeSize = (tileCount) => {
+    this.setState(this.defaultState(NEW_GAME, 1, Math.sqrt(tileCount + 1), tileCount));
   };
 
   onPauseClick = () => {
@@ -201,7 +210,8 @@ class GameFactory extends Component {
             gettingEmptyBoxLocation: this.gettingEmptyBoxLocation,
             moveCell: this.move,
             clickMove: this.clickMove,
-            pauseGame: this.onPauseClick
+            pauseGame: this.onPauseClick,
+            changeSize: this.changeSize
           }}
         >
           {this.props.children}
