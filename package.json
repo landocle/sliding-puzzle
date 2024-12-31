@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html --public-url ./sliding-puzzle"
+    "build": "parcel build index.html --public-url ./"
   },
   "dependencies": {
     "@babel/runtime": "^7.26.0",
