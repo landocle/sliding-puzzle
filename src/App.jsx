@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 
-import '@Styles/App.scss';
+import '@Styles/app.scss';
 
 import { Home } from '@Pages';
 import { GameFactory } from '@Elements';
