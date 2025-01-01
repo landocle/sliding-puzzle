@@ -9,7 +9,7 @@ import { GameFactory } from '@Elements';
 export default class App extends PureComponent {
   render() {
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/sliding-puzzle">
         <GameFactory>
           <div className="app">
             <Routes>
