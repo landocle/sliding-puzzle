@@ -27,7 +27,7 @@ const KeyButton = ({ currentKey, index }) => {
     />
   );
 };
-const Instructions = () => {
+const Instructions = ({tileCount}) => {
   const [key, moveKey] = useState(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const Instructions = () => {
         </span>
       </Keys>
       <GameInstruction>
-        Move tiles in grid <br /> to order them from <strong>1 to 15.</strong>
+        Move tiles in grid <br /> to order them from <strong>1 to {tileCount}.</strong>
       </GameInstruction>
     </GameInstructionContainer>
   );

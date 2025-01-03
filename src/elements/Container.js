@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { color, transition, bounceIn, fadeIn } from '@Utils';
+import { color, transition, bounceIn, fadeIn, setupColumns } from '@Utils';
 
 export const Container = styled.div`
   width: 500px;
@@ -12,8 +12,9 @@ export const Container = styled.div`
 
 export const GridContainer = styled.div`
   margin: 5px 0;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: ${props => setupColumns(props.gridwidth) };
   display: grid;
+  justify-content: center;
   position: relative;
   padding: 15px;
   cursor: default;
@@ -21,14 +22,12 @@ export const GridContainer = styled.div`
   background: ${color.backgroundColor};
   border-radius: 12px;
   width: 500px;
-  height: 500px;
   .grid-row {
     margin-bottom: 15px;
     display: flex;
   }
   @media screen and (max-width: 520px) {
     width: 292px;
-    height: 292px;
     .grid-row {
       margin-bottom: 10px;
     }
@@ -40,6 +39,8 @@ export const GridOverlay = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
+  top: 0;
+  left: 0;
   padding: 15px;
   z-index: 100;
   background-color: ${color.gridOverlayBackground};
@@ -47,12 +48,10 @@ export const GridOverlay = styled.div`
   margin-top: 3px;
   margin-left: 2px;
   border-radius: 10px;
-  width: 499px;
-  height: 487px;
+  width: 100%;
+  height: 100%;
   animation: ${fadeIn} 250ms;
   @media screen and (max-width: 520px) {
-    width: 280px;
-    height: 275px;
     margin-left: 6px;
     margin-top: 5px;
   }
@@ -82,10 +81,10 @@ export const CellContainer = styled.div`
 // 67px;
 export const NumberCellContainer = styled.div`
   display: ${props =>
-    props.number > 0 && props.number < 16 ? 'flex' : 'none'};
+    props.number > 0 && props.number <= props.tilecount ? 'flex' : 'none'};
   border-radius: 10px;
   background: ${props =>
-    props.index === props.number ? '#E88A45' : '#6ac6b8'};
+    props.index === props.number ? color.highlightColor : '#6ac6b8'};
   cursor: pointer;
   position: relative;
   user-select: none;
@@ -206,6 +205,15 @@ export const Keys = styled.span`
   @media screen and (max-width: 520px) {
     display: none;
   }
+`;
+
+export const SizeContainer = styled.div`
+  background-color: ${color.gridTileColor};
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 15px;
 `;
 
 export const GameScore = styled.div`

@@ -7,6 +7,7 @@ export const modalTextColor = '#534648';
 export const modalBackgroundColor = '#FFFFFF';
 export const overlayBackgroundColor = '#000000';
 export const gridOverlayBackground = '#412667b5';
+export const highlightColor = '#E88A45';
 
 export default {
   backgroundColor,
@@ -16,5 +17,6 @@ export default {
   modalTextColor,
   modalBackgroundColor,
   overlayBackgroundColor,
-  gridOverlayBackground
+  gridOverlayBackground,
+  highlightColor
 };

@@ -19,12 +19,13 @@ const moveKey = ({ x, y }) => {
 export default class Cell extends Component {
   render() {
     //const { x, y } = moveKey(this.props.x, this.props.y);
-    const { number, index } = this.props;
+    const { number, index, tileCount } = this.props;
     return (
       <CellContainer>
         <NumberCellContainer
           number={number}
           index={index + 1}
+          tilecount={tileCount}
           onClick={() => {
             this.props.clickMove(index);
           }}

@@ -17,7 +17,7 @@ const Home = ({ eventType }) => {
               <br />
               <Game eventType={eventType} {...values} {...methods} />
               <br />
-              <Instruction />
+              <Instruction tileCount={values.tileCount} />
             </Fragment>
           );
         }}

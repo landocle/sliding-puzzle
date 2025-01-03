@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   GameScore,
   Button,
+  SizeSelector,
   PlayPauseContainer,
   Modal,
   ModalContainer
@@ -27,6 +28,7 @@ export default class Game extends Component {
   render() {
     return (
       <div>
+        <SizeSelector tileCount={this.props.tileCount} onChange={this.props.changeSize} />
         <GameScore>
           <Button onClick={this.props.resetGame}>new game</Button>
           <Score moves={this.props.moves} seconds={this.props.seconds} />
